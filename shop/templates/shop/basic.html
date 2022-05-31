@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" rel="stylesheet">
+    <title>{% block title %} {% endblock %}</title>
+    <style>
+
+        footer
+        {
+              position: static;
+              text-align:center;
+              bottom: 0;
+              right:0;
+              left:0;
+              display:flex;
+              justify-content:center;
+              margin-top: auto;
+              background-color:gray;
+        }
+
+        body
+        {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        {% block css %}  {% endblock %}
+
+    </style>
+
+    {% block head %}  {% endblock %}
+
+</head>
+
+<body>
+
+    <nav class="navbar font-weight-bold navbar-expand-lg sticky-top navbar-light bg-danger">
+        <a class="navbar-brand" href="/shop">E-Kart</a>
+        <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler"
+                data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/shop/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/shop/about">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/shop/tracker">Tracker</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/shop/contact">Contact Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/blog">Blog</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/shop/signIn">SignIn</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/shop/signUp">SignUp</a>
+                </li>
+            </ul>
+
+            <form action="/shop/search/" class="form-inline my-2 my-lg-0" method="get">
+                <input onkeyup="success()" aria-label="Search"  class="form-control mr-sm-2" id="search" name="search" placeholder="Search"
+                       type="search">
+                <button class="btn btn-outline-dark font-weight-bold my-2 my-sm-0" id="searchButton" disabled="true" type="submit">Search</button>
+            </form>
+
+            <button class="btn btn-info mx-2" data-toggle="popover" data-container="body" data-html="true"
+                data-placement="bottom" data-animation="true" onclick="clickHandler()"  id="popcart" type="button">
+                Cart(<span id="cart">0</span>)
+                <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" id="svg_cart" width="25px">
+            </button>
+        </div>
+    </nav>
+
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>Message : </strong> {{ message }}
+        <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+
+    {% block body %} {% endblock %}
+
+    <footer>
+            <br></br>
+            <p>&copy; 2022 E-Kart, All rights reserved</p>
+    </footer>
+
+    <script crossorigin="anonymous" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+
+        function success()
+        {
+             if(document.getElementById("search").value==="")
+             {
+                    document.getElementById('searchButton').disabled = true;
+             }
+             else
+             {
+               document.getElementById('searchButton').disabled = false;
+             }
+        }
+        function clickHandler()
+        {
+            updatePopover();
+            $('#popcart').popover('show')
+        }
+    </script>
+        {% block js %} {% endblock %}
+</body>
+</html>

@@ -1,0 +1,47 @@
+{%extends 'shop/basic.html'%}
+{% block title %}Sign In at E-Kart {% endblock %}
+{% block css %}
+
+    #login_icon{
+        height:139px;
+    }
+    .signIn{
+        width:500px;
+    }
+    @media only screen and (max-width:600px){
+        .signIn{
+        width:350px;
+        }
+    }
+
+{% endblock %}
+
+{%block body%}
+<div class="container mt-4 signIn">
+    <h2 class="mb-3">Sign In to your E-Kart Account</h2>
+
+
+    <form action="/shop/signIn/" method="POST" >
+        {%csrf_token%}
+        <div class="container d-flex justify-content-center">
+            <img src="https://img.icons8.com/dotty/344/login-rounded-right.png" class="img-fluid" id="login_icon">
+        </div>
+        <div class="form-group">
+            <label for="loginusername">Username</label>
+            <input class="form-control" id="loginusername" name="loginusername" placeholder="Enter your username "
+                   required type="text">
+        </div>
+
+        <div class="form-group">
+            <label for="loginpassword">Enter your password </label>
+            <input class="form-control" id="loginpassword" name="loginpassword" placeholder="Enter your password "
+                   required type="password">
+        </div>
+
+        <div class="form-group">
+            <input class="btn btn-sm btn-info" type="submit" value="Sign In">
+        </div>
+    </form>
+</div>
+
+{%endblock body%}
