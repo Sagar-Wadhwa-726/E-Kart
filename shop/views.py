@@ -9,7 +9,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from .PayTm import Checksum
 from .models import Product, Contact, orders, orderUpdate
-from django.views.decorators.common import no_append_slash
 
 MERCHANT_KEY = 'T9dRDEmPnzoCfGWt'
 
@@ -232,7 +231,6 @@ def handleRequest(request):
             print("YOUR ORDER WAS NOT SUCCESSFUL BECAUSE:" + response_dict['RESPMSG'])
     return render(request, 'shop/paymentstatus.html', {'response': response_dict})
 
-@no_append_slash
 def signUp(request):
     print("you are trying to sign Up")
     if request.method == 'POST':
@@ -245,7 +243,7 @@ def signUp(request):
         pass2 = request.POST['pass2']
 
         # applying checks
-        if len(username) < 10:
+        if len(username) > 10:
             messages.error(request, " Your user name must be under 10 characters")
             return redirect('shop/')
 
@@ -265,7 +263,6 @@ def signUp(request):
     print("GET RECEIVED BYE")
     return render(request, 'shop/signUp.html')
 
-@no_append_slash
 def signIn(request):
     print("you are tring to sign in")
     if request.method == "POST":
