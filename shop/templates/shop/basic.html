@@ -12,14 +12,17 @@
         footer
         {
               position: static;
+              height:8vh;
               text-align:center;
               bottom: 0;
               right:0;
               left:0;
               display:flex;
               justify-content:center;
+              align-items:center;
               margin-top: auto;
-              background-color:gray;
+              background-color:#0c012e;
+              color:white;
         }
 
         body
@@ -49,24 +52,24 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/shop/">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link {% block homeactive %} {% endblock %}" href="/shop/">Home <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {% block aboutactive %} {% endblock %}">
                     <a class="nav-link" href="/shop/about">About Us</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {% block trackeractive %} {% endblock %}">
                     <a class="nav-link" href="/shop/tracker">Tracker</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {% block contactactive %} {% endblock %}">
                     <a class="nav-link" href="/shop/contact">Contact Us</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {% block blogactive %} {% endblock %}">
                     <a class="nav-link" href="/blog">Blog</a>
                 </li>
-                <li class="nav-item ">
+                <li class="nav-item {% block signinactive %} {% endblock %}">
                     <a class="nav-link" href="/shop/signIn">SignIn</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {% block signupactive %} {% endblock %}">
                     <a class="nav-link" href="/shop/signUp">SignUp</a>
                 </li>
             </ul>
@@ -80,7 +83,7 @@
             <button class="btn btn-info mx-2" data-toggle="popover" data-container="body" data-html="true"
                 data-placement="bottom" data-animation="true" onclick="clickHandler()"  id="popcart" type="button">
                 Cart(<span id="cart">0</span>)
-                <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" id="svg_cart" width="25px">
+                <img src="/media/shop/images/cart.png" id="svg_cart" width="25px">
             </button>
         </div>
     </nav>
@@ -97,8 +100,9 @@
     {% block body %} {% endblock %}
 
     <footer>
-            <br></br>
-            <p>&copy; 2022 E-Kart, All rights reserved</p>
+            <br>
+                <p>&copy; 2022 E-Kart, All rights reserved</p>
+            <br>
     </footer>
 
     <script crossorigin="anonymous" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="

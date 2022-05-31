@@ -15,4 +15,5 @@ urlpatterns = [
     path("handleRequest/", views.handleRequest, name='handleRequest'),
     path("signUp/",views.signUp,name="signUp"),
     path("signIn/",views.signIn,name="signIn"),
-]
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

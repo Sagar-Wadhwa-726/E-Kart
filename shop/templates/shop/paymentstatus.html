@@ -14,76 +14,78 @@ body
 {
     border:1px solid #cfcfcf;
     height:350px;
+    width:380px;
     margin:auto;
     border-radius:20px;
     background:##e4e2e2a6;
 }
 .payment_header
 {
-    background:rgba(255,102,0,1);
-    padding:20px;
-    border-radius:20px 20px 0px 0px;
+background:rgba(255,102,0,1);
+padding:20px;
+border-radius:20px 20px 0px 0px;
+
 }
 
 .check
 {
-    margin:0px auto;
-    width:50px;
-    height:50px;
-    border-radius:100%;
-    background:#fff;
-    text-align:center;
+margin:0px auto;
+width:50px;
+height:50px;
+border-radius:100%;
+background:#fff;
+text-align:center;
 }
 
 .check i
 {
-    vertical-align:middle;
-    line-height:50px;
-    font-size:30px;
+vertical-align:middle;
+line-height:50px;
+font-size:30px;
 }
 
 .content
 {
-    text-align:center;
-    line-height:16px !important;
+text-align:center;
+line-height:16px !important;
 }
 
 .content  h1
 {
-    font-size:25px;
-    padding-top:25px;
+font-size:25px;
+padding-top:25px;
 }
 
 .content a
 {
-    width:200px;
-    height:35px;
-    color:#fff;
-    border-radius:30px;
-    padding:5px 10px;
-    background:rgba(255,102,0,1);
-    transition:all ease-in-out 0.3s;
+width:200px;
+height:35px;
+color:#fff;
+border-radius:30px;
+padding:5px 10px;
+background:rgba(255,102,0,1);
+transition:all ease-in-out 0.3s;
 }
 
 .content a:hover
 {
-    text-decoration:none;
-    background:#000;
+text-decoration:none;
+background:#000;
 }
 
-.video_ad {
-    display: inline-block;
-    width: 48%;
-    margin-top: 20px;
-    margin-left: 1%;
+.video_ad
+{
+display: inline-block;
+width: 48%;
+margin-top: 20px;
+margin-left: 1%;
 }
 {% endblock %}
 
 {% block body %}
-
-<div class="row" style="width:43x0px; margin:auto">
-    <div class="col-md-5 mx-auto mt-5">
-        <div class="payment ">
+<div class="row" style="margin:auto">
+    <div class="col-md-6 mx-auto mt-5">
+        <div class="payment">
             {% if response.RESPCODE == "01" %}
             <div class="payment_header" style="background: rgb(19 221 15);">
                 <div class="check"><i class="fa fa-check" aria-hidden="true"></i></div>

@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from .PayTm import Checksum
 from .models import Product, Contact, orders, orderUpdate
+from django.views.decorators.common import no_append_slash
 
 MERCHANT_KEY = 'T9dRDEmPnzoCfGWt'
 
@@ -231,6 +232,7 @@ def handleRequest(request):
             print("YOUR ORDER WAS NOT SUCCESSFUL BECAUSE:" + response_dict['RESPMSG'])
     return render(request, 'shop/paymentstatus.html', {'response': response_dict})
 
+
 def signUp(request):
     print("you are trying to sign Up")
     if request.method == 'POST':
@@ -242,17 +244,17 @@ def signUp(request):
         pass1 = request.POST['pass1']
         pass2 = request.POST['pass2']
 
-        # applying checks
-        if len(username) > 10:
-            messages.error(request, " Your user name must be under 10 characters")
-            return redirect('shop/')
-
-        if not username.isalnum():
-            messages.error(request, " User name should only contain letters and numbers")
-            return redirect('shop/')
-        if (pass1 != pass2):
-            messages.error(request, " Passwords do not match")
-            return redirect('shop/')
+        # # applying checks
+        # if len(username) < 10:
+        #     messages.error(request, " Your user name must be under 10 characters")
+        #     return redirect('shop/')
+        #
+        # if not username.isalnum():
+        #     messages.error(request, " User name should only contain letters and numbers")
+        #     return redirect('shop/')
+        # if (pass1 != pass2):
+        #     messages.error(request, " Passwords do not match")
+        #     return redirect('shop/')
 
         myuser = User.objects.create_user(username, email, pass1)
         myuser.first_name = fname

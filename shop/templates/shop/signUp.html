@@ -2,6 +2,8 @@
 
 {% block title %}Sign Up at E-Kart {% endblock %}
 
+{% block signupactive %} active {% endblock %}
+
 {% block css %}
 
     .signUp{
@@ -28,12 +30,12 @@
 
     <h2 class="mb-5">Create your account at E-Kart</h2>
 
-    <form action="/" method="POST" >
+    <form action="/" method="POST">
 
         {%csrf_token%}
 
         <div class="container d-flex justify-content-center">
-            <img src="https://cdn-icons-png.flaticon.com/512/7385/7385229.png" alt="" class="img-fluid" id="cart_icon" style="height: 250px;">
+            <img src="/media/shop/images/carticon.png" alt="" class="img-fluid" id="cart_icon" style="height: 250px;">
         </div>
 
         <div class="form-group">

@@ -1,7 +1,7 @@
 {% extends 'shop/basic.html' %}
 
 {% block title %} Welcome To E-Kart ! {% endblock %}
-
+{% block homeactive %} active {% endblock %}
 {% block css %}
 
     .col-md-3
@@ -72,7 +72,7 @@
 
         <!-- Slide show begins from here-->
         {% for products, range, number_of_slides in allprods %}
-        <h3 class="my-4 fade">Flash sale on-{{products.0.category}}, recommended items for you</h3>
+        <h3 class="my-4 fade">Flash Sale On - {{products.0.category}}, recommended items for you</h3>
         <div class="row fade">
             <div id="demo{{forloop.counter}}" class="col carousel slide my-3" data-ride="carousel">
                 <ul class="carousel-indicators">
