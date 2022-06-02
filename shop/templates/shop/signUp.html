@@ -4,6 +4,8 @@
 
 {% block signupactive %} active {% endblock %}
 
+{% block favicon %}favicon{% endblock %}
+
 {% block css %}
 
     .signUp{
@@ -26,12 +28,12 @@
 {% endblock %}
 
 {%block body%}
+
 <div class="container mt-5 signUp">
 
-    <h2 class="mb-5">Create your account at E-Kart</h2>
-
-    <form action="/" method="POST">
-
+    <h2 class="mb-2 text-center">Create your account at E-Kart</h2>
+    <h6 class="text-center mb-5">or <a class="text-decoration-none" href="/shop/signIn">Sign In </a> </h6>
+    <form action="/shop/signUp/" method="POST">
         {%csrf_token%}
 
         <div class="container d-flex justify-content-center">
@@ -41,7 +43,7 @@
         <div class="form-group">
             <label for="username">Username</label>
             <input class="form-control" id="username" name="username" placeholder="Choose a unique username" required
-                   type="text">
+                   type="text" maxlength="10">
         </div>
 
         <div class="form-group">
@@ -61,21 +63,32 @@
         </div>
 
         <div class="form-group">
+            <label for="user_phone_number">Phone Number</label>
+            <input class="form-control"  id="user_phone_number" name="user_phone_number" placeholder="Enter your phone number" required
+                   type="tel" maxlength="10">
+        </div>
+
+        <div class="form-group">
             <label for="pass1">Choose a password</label>
             <input class="form-control" id="pass1" name="pass1" placeholder="Choose Your Password" required
-                   type="password">
+                   type="password" maxlength="10">
         </div>
 
         <div class="form-group">
             <label for="pass2">Confirm Password</label>
             <input class="form-control" id="pass2" name="pass2" placeholder="Enter your password again" required
-                   type="password">
+                   type="password" maxlength="10">
         </div>
-
         <div class="form-group">
             <button class="btn btn-sm btn-info" type="submit">Create An Account</button>
         </div>
-
     </form>
 </div>
-{%endblock body%}
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+
+
+

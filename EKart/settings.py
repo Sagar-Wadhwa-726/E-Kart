@@ -1,7 +1,9 @@
 import os
 from pathlib import Path
+
+import django.core.mail.backends.smtp
 from django.contrib.messages import constants as messages
-from django.conf import settings
+import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -12,7 +14,7 @@ SECRET_KEY = 'django-insecure-!vj$*wvqlh8%)gd#&6=8vbw&&2wml*7ha2z$#&un*$$(g5f_v-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["ec08-103-57-85-209.in.ngrok.io","127.0.0.1"]
+ALLOWED_HOSTS = ["93d8-103-57-85-176.in.ngrok.io","127.0.0.1","localhost"]
 
 
 # Application definition
@@ -117,4 +119,6 @@ MEDIA_URL = '/media/'
 MESSAGE_TAGS = {
     messages.ERROR:'danger'
 }
+
+
 

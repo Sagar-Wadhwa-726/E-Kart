@@ -1,5 +1,7 @@
 import json
 import requests
+import random
+
 from math import ceil
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -8,15 +10,14 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from .PayTm import Checksum
-from .models import Product, Contact, orders, orderUpdate
-from django.views.decorators.common import no_append_slash
+from .models import Product, Contact, orders, orderUpdate, Profile
 
+# Paytm merchant key
 MERCHANT_KEY = 'T9dRDEmPnzoCfGWt'
 
 
 # Function to show the items on the main page of the website
 def index(request):
-
     # initialize an empty list of all prods
     allprods = []
 
@@ -40,7 +41,7 @@ def index(request):
 
 # Helper function to match the search query
 def searchMatch(query, item):
-    '''return true if query matches the item'''
+    """return true if query matches the item"""
     if query in item.desc.lower() or query in item.product_name.lower() or query in item.category.lower():
         return True
     else:
@@ -102,13 +103,12 @@ def contact(request):
 
 # Tracker function, which helps the user to track their orders
 def tracker(request):
-    global response
     if request.method == 'POST':
         OrderId = request.POST.get('OrderId', 'default')
         email = request.POST.get('email', 'default')
 
         try:
-            # retreive all objects from the orders database where the order_id=OrderId i.e the orderid entered
+            # retrieve all objects from the orders' database where the order_id=OrderId i.e the orderid entered
             # by the user
 
             order = orders.objects.filter(order_id=OrderId, email=email)
@@ -145,8 +145,10 @@ def products(request, myid):
 
 
 def checkout(request):
-    global order, email
+    global added_object_id, added_object_update
+
     if request.method == "POST":
+        print("post")
         amount = request.POST.get('amount', '0')
         items_json = request.POST.get('itemsJson', 'null')
         name = request.POST.get('name', 'default')
@@ -162,21 +164,22 @@ def checkout(request):
                        phone=phone, zip_code=zip_code, items_json=items_json, amount=amount)
 
         order.save()
+        added_object_id = order.order_id
         # when ordered item, create an object of the upateOrder class and inform the user
         # that order has been placed
 
         update = orderUpdate(order_id=order.order_id, update_desc="Your order has been placed")
+        added_object_update = update
         update.save()
         # REQUEST PAYTM TO GENERATE THE BILL AND MAKE THE USER PAY THE BILL AMOUNT AFTER THE FORM HAS BEEN SUBMITTED
 
         paytmParams = dict()
-
         paytmParams["body"] = {
             "requestType": "Payment",
             "mid": "gotSnQ74235192141604",
             "websiteName": "WEBSTAGING",
             "orderId": str(order.order_id),
-            "callbackUrl": "http://127.0.0.1:8000/shop/handleRequest/",
+            "callbackUrl": "https://93d8-103-57-85-176.in.ngrok.io/shop/handleRequest/",
             "txnAmount": {
                 "value": str(order.amount).strip(),
                 "currency": "INR",
@@ -207,6 +210,10 @@ def checkout(request):
         # show the user the paytm payment gateway html page
         return render(request, "shop/paytm.html", {'data': payment_page})
 
+    if request.method == 'GET' and not request.user.is_authenticated:
+        messages.warning(request, "Sign In to your E-Kart account to checkout ")
+        return render(request, "shop/signIn.html")
+
     return render(request, "shop/checkout.html")
 
 
@@ -229,63 +236,79 @@ def handleRequest(request):
         if (response_dict['RESPCODE'] == "01"):
             print("ORDER SUCCESSFUL")
         else:
+            print(added_object_id)
             print("YOUR ORDER WAS NOT SUCCESSFUL BECAUSE:" + response_dict['RESPMSG'])
-    return render(request, 'shop/paymentstatus.html', {'response': response_dict})
+            orders.objects.filter(order_id=added_object_id).delete()
+            orderUpdate.objects.filter(order_id=added_object_id).delete()
+    return render(request, 'shop/paymentstatus.html', {'response': response_dict, })
 
 
 def signUp(request):
-    print("you are trying to sign Up")
     if request.method == 'POST':
-        print("POST RECEIVED")
         username = request.POST['username']
         email = request.POST['email']
         fname = request.POST['fname']
         lname = request.POST['lname']
         pass1 = request.POST['pass1']
         pass2 = request.POST['pass2']
+        user_phone_number = request.POST['user_phone_number']
 
-        # # applying checks
-        # if len(username) < 10:
-        #     messages.error(request, " Your user name must be under 10 characters")
-        #     return redirect('shop/')
-        #
-        # if not username.isalnum():
-        #     messages.error(request, " User name should only contain letters and numbers")
-        #     return redirect('shop/')
-        # if (pass1 != pass2):
-        #     messages.error(request, " Passwords do not match")
-        #     return redirect('shop/')
+        # constraints on the input fields of the signUp page
+        if Profile.objects.filter(mobile=user_phone_number).first():
+            messages.error(request, "User already Registered")
+            return redirect('/shop/signUp/')
+        elif User.objects.filter(username=username).first():
+            messages.error(request, "This username is already taken")
+            return redirect('/shop/signUp/')
+        elif pass1 != pass2:
+            messages.error(request, "Passwords do not match")
+            return redirect('/shop/signUp/')
+
+        # if all checks passed, generate the otp
+        otp = str(random.randint(1000, 9999))
 
         myuser = User.objects.create_user(username, email, pass1)
         myuser.first_name = fname
         myuser.last_name = lname
         myuser.save()
-        messages.success(request, "Your E-kart account has been created successfully ")
-        return redirect('shop/')
-    print("GET RECEIVED BYE")
+
+        # create an object of the profile class and store it in the database
+        profile = Profile(user=myuser, mobile=user_phone_number, otp=otp)
+        profile.save()
+
+        return redirect('/shop/otp/')
+
     return render(request, 'shop/signUp.html')
 
+
+def otphandler(request):
+    return render(request, "shop/otp.html")
+
+
 def signIn(request):
-    print("you are tring to sign in")
     if request.method == "POST":
-        print("POST RECEIVED")
-        # Get the post parameters
+
         loginusername = request.POST['loginusername']
         loginpassword = request.POST['loginpassword']
         user = authenticate(username=loginusername, password=loginpassword)
+
         if user is not None:
-            print("valid user")
             login(request, user)
             messages.success(request, "Successfully Logged In")
-            return redirect("shop/")
+            return redirect("/shop/")
+        if not User.objects.filter(username=loginusername).exists():
+            messages.error(request, "User Not Found")
         else:
-            print("no user")
             messages.error(request, "Invalid credentials! Please try again")
-            return redirect("shop/")
-    print("get received")
+            return redirect("/shop/signIn")
+
     return render(request, 'shop/signIn.html')
 
 
 def logout_handler(request):
     logout(request)
-    return redirect("/")
+    messages.success(request, "Logged Out Successfully")
+    return redirect("/shop/")
+
+
+

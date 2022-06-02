@@ -4,6 +4,8 @@
 
 {% block title %} Track Your Order {% endblock %}
 
+{% block favicon %}favicon{% endblock %}
+
 {% block body %}
 <div class="container">
     <div class="col">
@@ -12,7 +14,7 @@
             <div class="col-md-6">
                 <label class="form-label" for="OrderId">Order ID</label>
                 <input class="form-control" id="OrderId" name="OrderId" placeholder="Enter your Order ID" required
-                       type="text">
+                       type="tel">
             </div>
             <div class="col-md-6">
                 <label class="form-label" for="inputEmail4">Email</label>
@@ -51,6 +53,7 @@ $('#trackerForm').submit(function(event) {
         // send csrfmiddlewaretoken also to check from where the form is being submitted
         'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
     }
+
     // processing the form
 
     $.ajax({
@@ -117,7 +120,6 @@ $('#trackerForm').submit(function(event) {
     // do not forget to replace the slim, compressed jquery with uncompressed jquery otherwise the page will reload
 
 })
-
 
 </script>
 {% endblock %}

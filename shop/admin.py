@@ -7,5 +7,4 @@ admin.site.register(Product)
 admin.site.register(Contact)
 admin.site.register(orders)
 admin.site.register(orderUpdate)
-
-
+admin.site.register(Profile)

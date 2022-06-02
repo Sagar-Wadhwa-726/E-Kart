@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Product(models.Model):
@@ -54,3 +55,13 @@ class orderUpdate(models.Model):
 
     def __str__(self):
         return self.update_desc[0:17] + "..."
+
+
+# Creating a model named profile which is the extension of the User Model
+# Extending the User Model, by using OnetoOneRelationship, user model binded to the Profile model through foreign Key
+
+# on_delete=models.CASCADE --> if user db deleted, then delete the Profile db also
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    mobile = models.CharField(max_length=20)
+    otp = models.CharField(max_length=6)

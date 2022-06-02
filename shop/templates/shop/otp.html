@@ -23,29 +23,24 @@
 {% endblock %}
 
 {%block body%}
+
 <div class="container mt-4 signIn">
-    <h2 class="mb-2">Sign In to your E-Kart Account</h2>
-    <h6 class="text-center mb-3">or <a class="text-decoration-none" href="/shop/signUp">Sign Up </a> </h6>
-    <form action="/shop/signIn/" method="POST" >
+
+    <h2 class="mb-2">Enter the OTP sent to Mobile Number</h2>
+    <form action="/shop/" method="POST" >
         {%csrf_token%}
         <div class="container d-flex justify-content-center">
             <img src="/media/shop/images/signin.png" class="img-fluid" id="login_icon">
         </div>
 
         <div class="form-group">
-            <label for="loginusername">Username</label>
-            <input class="form-control" id="loginusername" name="loginusername" placeholder="Enter your username "
+            <label for="otp">OTP</label>
+            <input class="form-control" id="otp" name="loginusername" placeholder="Enter the otp"
                    required type="text">
         </div>
 
         <div class="form-group">
-            <label for="loginpassword">Enter your password </label>
-            <input class="form-control" id="loginpassword" name="loginpassword" placeholder="Enter your password "
-                   required type="password">
-        </div>
-
-        <div class="form-group">
-            <input class="btn btn-sm btn-info" type="submit" value="Sign In">
+            <input class="btn btn-sm btn-info" type="submit" value="Submit">
         </div>
     </form>
 </div>
