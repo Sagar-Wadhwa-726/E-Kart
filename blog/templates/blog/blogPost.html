@@ -1,0 +1,46 @@
+{% extends "blog/basic.html" %}
+
+{% block title %}{{post.title}}{% endblock %}
+
+{% block favicon %}favicon{% endblock %}
+
+{% block body %}
+<div class="container mt-3">
+    <div class="row mx-8">
+        <div class="col-md-8 blog-main">
+            <h3 class="pb-4 mb-4 font-italic border-bottom">
+                {{post.title}}
+            </h3>
+            <p class="blog-post-meta">{{post.pub_date}}, By : <a href="https://www.instagram.com/wadhwa5049/">Sagar
+                Wadhwa</a></p>
+            <div class="blog-post">
+                <h2 class="blog-post-title">{{post.head0}}</h2>
+                <p>{{post.chead0}}</p>
+
+                <h2>{{post.head1}}</h2>
+                <p>{{post.chead1}}</p>
+
+                <h2>{{post.head2}}</h2>
+                <p>{{post.chead2}}</p>
+            </div>
+        </div><!-- /.blog-main -->
+        <aside class="col-md-4 blog-sidebar">
+            <div class="p-4 mb-3 bg-light rounded">
+                <h4 class="font-italic">About</h4>
+                <p class="mb-0">Welcome to My Awesome Cart Blog Post Section. My Awesome Cart is an E-commerce website
+                    where
+                    you can buy and search for many products. It was established in 2022.
+            </div>
+            <div class="p-4">
+                <h4 class="font-italic">Contact Us On</h4>
+                <ol class="list-unstyled">
+                    <li><a href="https://github.com/Sagar-Wadhwa-726" target="_blank">GitHub</a></li>
+                    <li><a href="https://twitter.com/" target="_blank">Twitter</a></li>
+                    <li><a href="https://www.facebook.com/" target="_blank">Facebook</a></li>
+                </ol>
+            </div>
+        </aside><!-- /.blog-sidebar -->
+
+    </div>
+</div>
+{% endblock %}

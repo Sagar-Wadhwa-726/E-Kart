@@ -63,7 +63,8 @@ def search(request):
         n = len(prod)
         number_of_slides = (n // 4) + ceil((n / 4) - (n // 4))
         if n != 0:
-            allprods.append([prod, range(1, number_of_slides), number_of_slides])
+            allprods.append(
+                [prod, range(1, number_of_slides), number_of_slides])
 
     params = {
         'allprods': allprods,
@@ -93,9 +94,11 @@ def contact(request):
         if len(name) < 2 or len(email) < 3 or len(phone) < 10 or len(cust_query) < 4:
             messages.error(request, "Please fill the form correctly")
         else:
-            contact = Contact(name=name, email=email, phone=phone, cust_query=cust_query)
+            contact = Contact(name=name, email=email,
+                              phone=phone, cust_query=cust_query)
             contact.save()
-            messages.success(request, "Your message has been successfully sent")
+            messages.success(
+                request, "Your message has been successfully sent")
 
         return render(request, "shop/contact.html")
     return render(request, "shop/contact.html")
@@ -119,13 +122,15 @@ def tracker(request):
                 updates = []
 
                 for item in update:
-                    updates.append({'text': item.update_desc, 'time': item.timestamp})
+                    updates.append(
+                        {'text': item.update_desc, 'time': item.timestamp})
 
                     # converts py obj in json obj
                     # default=str so that date time can be json serializable, i.e so that it can be converted
                     # into a json object
 
-                    response = json.dumps([updates, order[0].items_json], default=str)
+                    response = json.dumps(
+                        [updates, order[0].items_json], default=str)
                 return HttpResponse(response)
 
             else:
@@ -168,7 +173,8 @@ def checkout(request):
         # when ordered item, create an object of the upateOrder class and inform the user
         # that order has been placed
 
-        update = orderUpdate(order_id=order.order_id, update_desc="Your order has been placed")
+        update = orderUpdate(order_id=order.order_id,
+                             update_desc="Your order has been placed")
         added_object_update = update
         update.save()
         # REQUEST PAYTM TO GENERATE THE BILL AND MAKE THE USER PAY THE BILL AMOUNT AFTER THE FORM HAS BEEN SUBMITTED
@@ -179,7 +185,7 @@ def checkout(request):
             "mid": "gotSnQ74235192141604",
             "websiteName": "WEBSTAGING",
             "orderId": str(order.order_id),
-            "callbackUrl": "https://93d8-103-57-85-176.in.ngrok.io/shop/handleRequest/",
+            "callbackUrl": "http://127.0.0.1:8000/shop/handleRequest/",
             "txnAmount": {
                 "value": str(order.amount).strip(),
                 "currency": "INR",
@@ -189,7 +195,8 @@ def checkout(request):
                 "custId": order.email,
             },
         }
-        checksum = Checksum.generateSignature(json.dumps(paytmParams["body"]), "T9dRDEmPnzoCfGWt")
+        checksum = Checksum.generateSignature(
+            json.dumps(paytmParams["body"]), "T9dRDEmPnzoCfGWt")
 
         paytmParams["head"] = {
             "signature": checksum
@@ -199,7 +206,8 @@ def checkout(request):
         ORDER_ID = order.order_id
         url = f"https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid={Paytm_id}&orderId={ORDER_ID}"
 
-        response = requests.post(url, data=post_data, headers={"Content-type": "application/json"}).json()
+        response = requests.post(url, data=post_data, headers={
+                                 "Content-type": "application/json"}).json()
         print(response)
         payment_page = {
             'mid': Paytm_id,
@@ -211,7 +219,8 @@ def checkout(request):
         return render(request, "shop/paytm.html", {'data': payment_page})
 
     if request.method == 'GET' and not request.user.is_authenticated:
-        messages.warning(request, "Sign In to your E-Kart account to checkout ")
+        messages.warning(
+            request, "Sign In to your E-Kart account to checkout ")
         return render(request, "shop/signIn.html")
 
     return render(request, "shop/checkout.html")
@@ -237,7 +246,8 @@ def handleRequest(request):
             print("ORDER SUCCESSFUL")
         else:
             print(added_object_id)
-            print("YOUR ORDER WAS NOT SUCCESSFUL BECAUSE:" + response_dict['RESPMSG'])
+            print("YOUR ORDER WAS NOT SUCCESSFUL BECAUSE:" +
+                  response_dict['RESPMSG'])
             orders.objects.filter(order_id=added_object_id).delete()
             orderUpdate.objects.filter(order_id=added_object_id).delete()
     return render(request, 'shop/paymentstatus.html', {'response': response_dict, })
@@ -260,29 +270,28 @@ def signUp(request):
         elif User.objects.filter(username=username).first():
             messages.error(request, "This username is already taken")
             return redirect('/shop/signUp/')
+        elif User.objects.filter(email=email).first():
+            messages.error(request, "This email is already taken")
+            return redirect('/shop/signUp/')
         elif pass1 != pass2:
             messages.error(request, "Passwords do not match")
             return redirect('/shop/signUp/')
 
-        # if all checks passed, generate the otp
-        otp = str(random.randint(1000, 9999))
 
         myuser = User.objects.create_user(username, email, pass1)
         myuser.first_name = fname
         myuser.last_name = lname
         myuser.save()
 
-        # create an object of the profile class and store it in the database
-        profile = Profile(user=myuser, mobile=user_phone_number, otp=otp)
-        profile.save()
+        profile_user = Profile(user=myuser,mobile=user_phone_number)
+        profile_user.save()
 
-        return redirect('/shop/otp/')
+        messages.success(request, "Your E-Kart Account has been created successfully")
+        return redirect('/shop/')
 
     return render(request, 'shop/signUp.html')
 
 
-def otphandler(request):
-    return render(request, "shop/otp.html")
 
 
 def signIn(request):
@@ -309,6 +318,3 @@ def logout_handler(request):
     logout(request)
     messages.success(request, "Logged Out Successfully")
     return redirect("/shop/")
-
-
-

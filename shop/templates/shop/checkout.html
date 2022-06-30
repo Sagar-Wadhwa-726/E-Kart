@@ -2,6 +2,8 @@
 
 {% block title %} Checkout {% endblock %}
 
+{% block favicon %}favicon{% endblock %}
+
 {% block body %}
 
     {% if user.is_authenticated %}
@@ -141,12 +143,6 @@
 
     $('#itemsJson').val(JSON.stringify(cart))
 
-    {% if thank %}
-        alert('Thanks for shopping with us ! Your order id is {{id}}. Use it to track your order');
-        localStorage.clear();
-        <!--after placing the order, redirect the user to shop again-->
-        document.location="/shop"
-    {% endif %}
     $('#amount').val($('#finalPrice').html())
 </script>
 {% endblock %}

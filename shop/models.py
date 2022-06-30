@@ -60,8 +60,10 @@ class orderUpdate(models.Model):
 # Creating a model named profile which is the extension of the User Model
 # Extending the User Model, by using OnetoOneRelationship, user model binded to the Profile model through foreign Key
 
-# on_delete=models.CASCADE --> if user db deleted, then delete the Profile db also
+# on_delete=models.CASCADE --> if a particular user db entry deleted, then delete the Profile db also for that user
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    mobile = models.CharField(max_length=20)
-    otp = models.CharField(max_length=6)
+    mobile = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.user.username

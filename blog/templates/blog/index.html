@@ -1,0 +1,35 @@
+{% extends 'blog/basic.html' %}
+
+{% block title %}My Awesome Cart - Blog{% endblock %}
+
+{% block favicon %}favicon{% endblock %}
+
+{% block body %}
+
+<body>
+<div class="container mt-3">
+    <div class="row mb-2">
+        {% for i in myallposts %}
+        <div class="col-md-6">
+            <div style="max-height:500px; margin:0px 0.1vw"
+                 class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow p-3 mb-5 bg-white rounded position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <h4 class="mb-0">{{i.head0|slice:"0:42"}} ...</h4>
+                    <p>{{i.pub_date}}</p>
+                    <div class="mb-1 text-muted">{{i.title|slice:"0:50"}} ...</div>
+                    <p class="card-text ">{{i.chead0|slice:"0:100"}} ...</p>
+                    <a href="blogposts/{{i.post_id}}" class="stretched-link my-3">Continue reading</a>
+                </div>
+                <span>
+                    <img src="/media/{{i.thumbnail}}" style="height:111px; border-radius:10%" alt="">
+                </span>
+            </div>
+        </div>
+        {% if forloop.counter|divisibleby:2 %}
+    </div>
+    <div class="row mb-2">
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock%}

@@ -16,6 +16,5 @@ urlpatterns = [
     path("signUp/",views.signUp,name="signUp"),
     path("signIn/",views.signIn,name="signIn"),
     path("logout_handler/",views.logout_handler,name="logout_handler"),
-    path("otp/",views.otphandler,name="otphandler"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
