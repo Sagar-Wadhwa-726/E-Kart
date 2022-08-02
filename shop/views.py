@@ -5,7 +5,7 @@ import random
 from math import ceil
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
@@ -150,10 +150,13 @@ def products(request, myid):
 
 
 def checkout(request):
-    global added_object_id, added_object_update
-
+    global added_object_id
+    added_object_id = 1
+    global added_object_update
+    added_object_update = None
     if request.method == "POST":
         print("post")
+
         amount = request.POST.get('amount', '0')
         items_json = request.POST.get('itemsJson', 'null')
         name = request.POST.get('name', 'default')
@@ -170,6 +173,7 @@ def checkout(request):
 
         order.save()
         added_object_id = order.order_id
+        print(added_object_id)
         # when ordered item, create an object of the upateOrder class and inform the user
         # that order has been placed
 
@@ -204,6 +208,7 @@ def checkout(request):
         post_data = json.dumps(paytmParams)
         Paytm_id = 'gotSnQ74235192141604'
         ORDER_ID = order.order_id
+
         url = f"https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid={Paytm_id}&orderId={ORDER_ID}"
 
         response = requests.post(url, data=post_data, headers={
@@ -317,4 +322,4 @@ def signIn(request):
 def logout_handler(request):
     logout(request)
     messages.success(request, "Logged Out Successfully")
-    return redirect("/shop/")
+    return HttpResponseRedirect("/shop/")
