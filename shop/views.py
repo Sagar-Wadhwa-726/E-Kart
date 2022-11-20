@@ -1,6 +1,5 @@
 import json
 import requests
-import random
 
 from math import ceil
 from django.contrib import messages
@@ -155,8 +154,6 @@ def checkout(request):
     global added_object_update
     added_object_update = None
     if request.method == "POST":
-        print("post")
-
         amount = request.POST.get('amount', '0')
         items_json = request.POST.get('itemsJson', 'null')
         name = request.POST.get('name', 'default')
@@ -173,7 +170,6 @@ def checkout(request):
 
         order.save()
         added_object_id = order.order_id
-        print(added_object_id)
         # when ordered item, create an object of the upateOrder class and inform the user
         # that order has been placed
 
@@ -212,7 +208,7 @@ def checkout(request):
         url = f"https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid={Paytm_id}&orderId={ORDER_ID}"
 
         response = requests.post(url, data=post_data, headers={
-                                 "Content-type": "application/json"}).json()
+            "Content-type": "application/json"}).json()
         print(response)
         payment_page = {
             'mid': Paytm_id,
@@ -282,21 +278,18 @@ def signUp(request):
             messages.error(request, "Passwords do not match")
             return redirect('/shop/signUp/')
 
-
         myuser = User.objects.create_user(username, email, pass1)
         myuser.first_name = fname
         myuser.last_name = lname
         myuser.save()
 
-        profile_user = Profile(user=myuser,mobile=user_phone_number)
+        profile_user = Profile(user=myuser, mobile=user_phone_number)
         profile_user.save()
 
         messages.success(request, "Your E-Kart Account has been created successfully")
         return redirect('/shop/')
 
     return render(request, 'shop/signUp.html')
-
-
 
 
 def signIn(request):
