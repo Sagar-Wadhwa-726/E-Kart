@@ -1,6 +1,3 @@
-# This code has been directly taken from the paytm developer docs
-# Below code represents the CHECKSUM used during payment, for a safe and secure payment
-
 import base64
 import string
 import random
@@ -12,7 +9,7 @@ from Crypto.Cipher import AES
 iv = '@@@@&&&&####$$$$'
 BLOCK_SIZE = 16
 
-if sys.version_info > (3, 0):
+if (sys.version_info > (3, 0)):
     __pad__ = lambda s: bytes(s + (BLOCK_SIZE - len(s) % BLOCK_SIZE) * chr(BLOCK_SIZE - len(s) % BLOCK_SIZE), 'utf-8')
 else:
     __pad__ = lambda s: s + (BLOCK_SIZE - len(s) % BLOCK_SIZE) * chr(BLOCK_SIZE - len(s) % BLOCK_SIZE)

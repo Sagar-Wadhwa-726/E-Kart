@@ -1,6 +1,5 @@
 import json
 import requests
-
 from math import ceil
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -12,7 +11,7 @@ from .PayTm import Checksum
 from .models import Product, Contact, orders, orderUpdate, Profile
 
 # Paytm merchant key
-MERCHANT_KEY = 'T9dRDEmPnzoCfGWt'
+MERCHANT_KEY = "T9dRDEmPnzoCfGWt"
 
 
 # Function to show the items on the main page of the website
@@ -180,6 +179,7 @@ def checkout(request):
         # REQUEST PAYTM TO GENERATE THE BILL AND MAKE THE USER PAY THE BILL AMOUNT AFTER THE FORM HAS BEEN SUBMITTED
 
         paytmParams = dict()
+
         paytmParams["body"] = {
             "requestType": "Payment",
             "mid": "gotSnQ74235192141604",
@@ -195,8 +195,7 @@ def checkout(request):
                 "custId": order.email,
             },
         }
-        checksum = Checksum.generateSignature(
-            json.dumps(paytmParams["body"]), "T9dRDEmPnzoCfGWt")
+        checksum = Checksum.generateSignature(json.dumps(paytmParams["body"]), "T9dRDEmPnzoCfGWt")
 
         paytmParams["head"] = {
             "signature": checksum
@@ -204,12 +203,9 @@ def checkout(request):
         post_data = json.dumps(paytmParams)
         Paytm_id = 'gotSnQ74235192141604'
         ORDER_ID = order.order_id
-
         url = f"https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid={Paytm_id}&orderId={ORDER_ID}"
 
-        response = requests.post(url, data=post_data, headers={
-            "Content-type": "application/json"}).json()
-        print(response)
+        response = requests.post(url, data=post_data, headers={"Content-type": "application/json"}).json()
         payment_page = {
             'mid': Paytm_id,
             'txnToken': response['body']['txnToken'],
@@ -242,15 +238,13 @@ def handleRequest(request):
             checksum = form[i]
 
     verify = Checksum.verifySignature(response_dict, MERCHANT_KEY, checksum)
-    if (verify):
-        if (response_dict['RESPCODE'] == "01"):
-            print("ORDER SUCCESSFUL")
+    if verify:
+        if response_dict['RESPCODE'] == "01":
+            pass
         else:
-            print(added_object_id)
-            print("YOUR ORDER WAS NOT SUCCESSFUL BECAUSE:" +
-                  response_dict['RESPMSG'])
             orders.objects.filter(order_id=added_object_id).delete()
             orderUpdate.objects.filter(order_id=added_object_id).delete()
+
     return render(request, 'shop/paymentstatus.html', {'response': response_dict, })
 
 
